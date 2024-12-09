@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pikachu Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        .game-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: #f4f4f4;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .character {
+            position: absolute;
+            bottom: 50px; /* Start at the ground */
+            left: 100px;
+            font-size: 50px;
+            color: yellow;
+            transition: transform 0.1s ease-in-out;
+        }
+
+        .ground {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background-color: #228B22;
+        }
+
+        /* Red Pokeball */
+        .obstacle {
+            position: absolute;
+            bottom: 50px;
+            right: -100px;
+            font-size: 50px;
+            color: red;
+            animation: moveObstacle 2s linear infinite;
+        }
+
+        .score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            color: black;
+        }
+
+        @keyframes moveObstacle {
+            0% {
+                right: -100px;
+            }
+            100% {
+                right: 100%;
+            }
+        }
+
+        /* Jump Animation */
+        @keyframes jump {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-150px); /* Jump height increased */
+            }
+            100% {
+                transform: translateY(0); /* Return to ground */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div id="pikachu" class="character">⚡</div>
+        <div id="ground" class="ground"></div>
+        <div id="score" class="score">Score: 0</div>
+    </div>
+
+    <script>
+        const pikachu = document.getElementById("pikachu");
+        const scoreDisplay = document.getElementById("score");
+        let score = 0;
+
+        // Game variables
+        let isJumping = false;
+        let gameInterval;
+        let obstacleInterval;
+        let firstPokeballTimeout;
+        let gameStarted = false;
+        let moveIntervalTime = 20; // Time in ms between each frame for the Pokeball movement
+        let speedMultiplier = 1;  // Initially, speed multiplier is 1 (no speed change)
+
+        // Start the game when the page is loaded
+        window.onload = () => {
+            startGame();
+        };
+
+        // Jump function with CSS animation
+        function jump() {
+            if (!isJumping) {
+                isJumping = true;
+                // Apply the jump animation
+                pikachu.style.animation = "jump 0.5s ease-out"; // 0.5 seconds for the jump
+                setTimeout(() => {
+                    isJumping = false;
+                    pikachu.style.animation = ""; // Remove the animation after it completes
+                }, 500); // After 500ms (animation duration)
+            }
+        }
+
+        // Main game loop
+        function gameLoop() {
+            // Check for collision with the Pokeball
+            const obstacles = document.querySelectorAll(".obstacle");
+            obstacles.forEach((pokeball) => {
+                if (checkCollision(pikachu, pokeball)) {
+                    alert("Game Over! Your score: " + score);
+                    resetGame();
+                }
+            });
+
+            // Update score
+            score++;
+            scoreDisplay.innerText = `Score: ${score}`;
+
+            // Check if the score is a multiple of 1000 and increase speed
+            if (score % 1000 === 0) {
+                increaseSpeed();
+            }
+        }
+
+        // Check for collision between Pikachu and the Pokeball
+        function checkCollision(pikachu, pokeball) {
+            const pikachuRect = pikachu.getBoundingClientRect();
+            const pokeballRect = pokeball.getBoundingClientRect();
+
+            return !(
+                pikachuRect.top > pokeballRect.bottom ||
+                pikachuRect.bottom < pokeballRect.top ||
+                pikachuRect.right < pokeballRect.left ||
+                pikachuRect.left > pokeballRect.right
+            );
+        }
+
+        // Move the Pokeball across the screen
+        function movePokeball() {
+            let pokeballX = window.innerWidth;
+            const pokeball = document.createElement("div");
+            pokeball.classList.add("obstacle");
+            pokeball.textContent = "🔴"; // Pokeball emoji
+            document.body.appendChild(pokeball);
+
+            const moveInterval = setInterval(() => {
+                pokeballX -= 2 * speedMultiplier;  // Increase speed by multiplier
+                pokeball.style.right = `${pokeballX}px`;
+
+                if (pokeballX < -100) {
+                    clearInterval(moveInterval);
+                    pokeball.remove(); // Remove Pokeball when it goes off-screen
+                }
+            }, moveIntervalTime);  // Time between each frame
+        }
+
+        // Increase the Pokeball speed by 25%
+        function increaseSpeed() {
+            speedMultiplier *= 1.25; // Increase speed by 25%
+            moveIntervalTime = Math.max(10, moveIntervalTime * 0.8);  // Reduce interval time (increase speed) with a minimum limit
+            console.log(`Speed increased: Multiplier = ${speedMultiplier.toFixed(2)}, Interval = ${moveIntervalTime}`);
+        }
+
+        // Start the game
+        function startGame() {
+            score = 0;
+            pikachu.style.animation = ""; // Remove any existing animations
+            scoreDisplay.innerText = `Score: ${score}`;
+
+            // Delay the start of the game (1.5 seconds)
+            setTimeout(() => {
+                gameStarted = true; // Game is now started
+                
+                // Halve the delay for the first Pokeball to 1 second after the initial 1.5 seconds
+                firstPokeballTimeout = setTimeout(() => {
+                    movePokeball(); // First Pokeball after 1 second
+                    obstacleInterval = setInterval(movePokeball, 2000); // Subsequent Pokeballs every 2 seconds
+                }, 1000); // First Pokeball after 1 second
+
+            }, 1500); // 1.5-second delay before starting the game
+
+            gameInterval = setInterval(gameLoop, 1000 / 60);  // 60 FPS
+
+            // Listen for spacebar and up arrow to trigger jump
+            window.addEventListener('keydown', (e) => {
+                if ((e.code === 'Space' || e.code === 'ArrowUp') && !isJumping) {
+                    jump();
+                }
+            });
+        }
+
+        // Reset the game after collision
+        function resetGame() {
+            clearInterval(gameInterval);
+            clearInterval(obstacleInterval);
+            clearTimeout(firstPokeballTimeout);
+            const obstacles = document.querySelectorAll(".obstacle");
+            obstacles.forEach((obstacle) => obstacle.remove()); // Remove all existing obstacles
+            pikachu.style.animation = ""; // Remove jump animation
+            score = 0;
+            scoreDisplay.innerText = `Score: ${score}`;
+            moveIntervalTime = 20;  // Reset move interval time to the initial value
+            speedMultiplier = 1;  // Reset speed multiplier to the initial value
+            startGame();  // Restart the game
+        }
+    </script>
+</body>
+</html>

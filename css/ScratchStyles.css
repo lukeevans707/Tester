@@ -1,0 +1,139 @@
+
+.tableauViz { 
+    Width: 300px; 
+    Height: 350px; 
+}
+
+.dataviz{
+    padding-left: 30px;
+    padding-bottom: 20px;
+}
+
+.EinsteinQuote{
+    Width: 500px;
+    padding-left: 30px;
+    padding-bottom: 20px;
+}
+
+.youtubevid{
+    padding-left: 30px;
+    padding-bottom: 20px;
+}
+
+.RealEstatePic{
+    width: 500px;
+    padding-left: 30px;
+    padding-bottom: 20px;
+}
+
+.container{
+    display:flex;
+    height: 400%;
+}
+
+.info{
+    flex: 1;
+    background-color: #6c7b89;
+    height: 100%;
+}
+
+.atlashalf{
+    flex: 1;
+    height: 100%;
+    background-image: url(../assets/img/basic-rgb-atlas-globe-free-vector.jpg);
+    background-size: cover;
+    background-position: 40% center;
+    background-repeat: no-repeat;
+}
+
+.header{
+    align-items: center;
+    background-color: #52606e;
+    display: flex;
+    justify-content:space-between;
+    height:115px;
+}
+
+.leftheader {
+    justify-content:space-between;
+    display: flex;
+    align-items: center;
+    padding-right: 5%;
+}
+
+.rightheader{
+    flex:1;
+    justify-content: space-between;
+    display: flex;
+    align-items:center;
+    padding-right: 10px;
+}
+
+.atlasicon{
+    width: 100px;
+    padding: 10px;
+
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+h1 {
+    color: #5b6171;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-size:220%;
+    padding-left: 10px;
+    border-bottom: #e8f1ff;
+    border-width: 20px;
+    text-shadow: -2px 2px 0px rgb(174, 185, 194);
+    background-color: #a1afb1;
+    padding: 10px;
+    margin-top: 0%;
+}
+
+h2{
+    color:#e8f1ff;
+    font-size:325%;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    text-shadow: -2px 2px 0px rgb(174, 185, 194);
+}
+
+h3{
+    color:#e8f1ff;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+
+a{
+    color:#e8f1ff;
+    text-decoration: none;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+}
+
+li{
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    color:#e8f1ff;
+    
+}
+
+.butlerlogodesign{
+    display: flex;
+    align-items: center;
+    gap: 0px; 
+}
+
+.butlericon{
+    width: 100px;
+    position:center;
+}
+
+h6{
+    margin:0px;
+    flex:1;
+    font-size:600%;
+    text-shadow: -4px 4px 0px rgb(174, 185, 194)
+    Z-index
+}
