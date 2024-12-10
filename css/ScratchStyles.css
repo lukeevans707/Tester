@@ -28,7 +28,7 @@
 
 .container{
     display:flex;
-    height: 400%;
+    height: 375%;
 }
 
 .info{
@@ -116,6 +116,7 @@ a{
 li{
     font-family:Verdana, Geneva, Tahoma, sans-serif;
     color:#e8f1ff;
+    font-weight:bold;
     
 }
 
@@ -123,17 +124,36 @@ li{
     display: flex;
     align-items: center;
     gap: 0px; 
+    padding-left:30px;
 }
 
 .butlericon{
     width: 100px;
     position:center;
+    z-index:2;
 }
 
 h6{
     margin:0px;
     flex:1;
     font-size:600%;
-    text-shadow: -4px 4px 0px rgb(174, 185, 194)
-    Z-index
+    text-shadow: -4px 4px 0px rgb(174, 185, 194);
+    z-index: 1;
+}
+
+h4{
+    color:#e8f1ff;
+    font-size: 120%;
+    padding-left:30px;
+}
+
+.gamelink{
+    text-decoration: underline;
+}
+
+.footer{
+    bottom:0px;
+    background-color: #52606e;
+    width:100%;
+    Height: 200px;
 }
